@@ -1,0 +1,10 @@
+{
+  "skills": ["pdf-processing"],
+  "query": "Extract all text from this PDF file and save it to output.txt",
+  "files": ["test-files/document.pdf"],
+  "expected_behavior": [
+    "Successfully reads the PDF file using an appropriate PDF processing library or command-line tool",
+    "Extracts text content from all pages in the document without missing any pages",
+    "Saves the extracted text to a file named output.txt in a clear, readable format"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "skills": ["pydantic-api-modeling"],
+  "query": "I want you to create pydantic models for the following API endpoint: \"https://rxnav.nlm.nih.gov/REST/rxcui/84815/allrelated.json\"",
+  "files": [],
+  "expected_behavior": [
+    "Successfully loads and activates the pydantic-api-modeling skill",
+    "Fetches or analyzes the API endpoint response structure",
+    "Generates valid Pydantic models that represent the API response schema",
+    "Creates properly typed Python classes with appropriate field types",
+    "If running validation scripts, uses the uv run command as instructed"
+  ]
+}

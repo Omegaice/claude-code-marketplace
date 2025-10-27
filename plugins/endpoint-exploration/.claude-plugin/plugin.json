@@ -1,0 +1,8 @@
+{
+  "name": "endpoint-exploration",
+  "version": "0.1.0",
+  "description": "Document REST API endpoints through systematic empirical testing",
+  "author": {
+    "name": "omegaice"
+  }
+}

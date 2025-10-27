@@ -1,0 +1,20 @@
+[project]
+name = "skill-evaluation"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Omegaice", email = "950526+Omegaice@users.noreply.github.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "claude-agent-sdk>=0.1.5",
+    "pydantic>=2.12.3",
+]
+
+[project.scripts]
+skill-evaluation = "skill_evaluation:main"
+
+[build-system]
+requires = ["uv_build>=0.8.6,<0.9.0"]
+build-backend = "uv_build"

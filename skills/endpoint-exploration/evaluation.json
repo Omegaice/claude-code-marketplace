@@ -1,0 +1,31 @@
+{
+  "skills": ["endpoint-exploration"],
+  "query": "My team needs to integrate with the RxNorm API endpoint at https://rxnav.nlm.nih.gov/REST/rxcui/{rxcui}/allrelated but the official docs are incomplete. I need to create proper documentation for our integration guide - can you help me figure out exactly how this endpoint behaves?",
+  "files": [],
+  "expected_behavior": [
+    "Successfully loads and activates the endpoint-exploration skill via Skill tool",
+    "Creates a samples/ directory to store test responses",
+    "Executes at least 5 distinct curl test cases with -i flag to capture full HTTP responses (headers + body)",
+    "Tests valid cases with real RxCUI values",
+    "Tests edge cases (boundary values like 0, 1, very large numbers, leading zeros)",
+    "Tests invalid inputs (non-numeric, negative values)",
+    "Tests format variations (JSON/XML via Accept header or URL extension)",
+    "Tests HTTP method variations (POST, PUT, DELETE) to confirm only GET works",
+    "Saves test responses to numbered files with descriptive names (e.g., 01-valid-aspirin.txt, 02-edge-case.txt)",
+    "Creates endpoint-documentation.md file",
+    "Documentation includes all required sections: Endpoint, Authentication, Parameters, Response Codes, Response Structure",
+    "Parameters section uses table format with columns for Parameter, Type, Required, Description",
+    "Response Codes section uses table format and accurately reflects tested behavior",
+    "Response Structure section uses tables for field descriptions (not just example JSON)",
+    "Documents discovered quirks or unusual behaviors (e.g., 200 OK for both valid and invalid resources)",
+    "Includes caching behavior if Cache-Control headers are present in responses",
+    "Includes format precedence rules if multiple format selection mechanisms exist",
+    "Includes detection logic for non-obvious success/failure conditions",
+    "Documentation is concise (typically 40-100 lines) without redundancy",
+    "All documented behaviors are evidence-based (verifiable from test samples)",
+    "Uses TodoWrite to track progress through the 7-step workflow checklist",
+    "Completes all 7 steps: URL Analysis, Parameter Identification, Test Case Generation, Sample Collection, Response Analysis, Documentation Writing, Iterative Refinement",
+    "Does not speculate or make assumptions beyond what was tested",
+    "Does not include redundant examples that just repeat table information"
+  ]
+}

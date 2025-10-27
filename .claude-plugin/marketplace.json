@@ -1,0 +1,19 @@
+{
+  "name": "claude-code-marketplace",
+  "owner": {
+    "name": "Omegaice",
+    "email": ""
+  },
+  "description": "Personal marketplace for custom Claude Code plugins",
+  "plugins": [
+    {
+      "name": "endpoint-exploration",
+      "source": "./plugins/endpoint-exploration",
+      "description": "Document REST API endpoints through systematic empirical testing. Analyzes URL structure, generates minimal test cases, executes requests, and produces concise API documentation.",
+      "version": "0.1.0",
+      "author": {
+        "name": "omegaice"
+      }
+    }
+  ]
+}
