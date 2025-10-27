@@ -46,7 +46,7 @@ def setup_workspace(spec: EvaluationSpec, skills_source_dir: Path) -> Path:
 
     Args:
         spec: Evaluation specification
-        skills_source_dir: Directory containing skills to copy (e.g., ~/.claude/skills)
+        skills_source_dir: Directory containing skills to copy (repository-relative, e.g., ./skills)
 
     Returns:
         Path to temporary workspace
@@ -58,12 +58,18 @@ def setup_workspace(spec: EvaluationSpec, skills_source_dir: Path) -> Path:
     claude_skills_dir = temp_dir / ".claude" / "skills"
     claude_skills_dir.mkdir(parents=True)
 
-    # Copy each required skill
+    # Copy each required skill, excluding evaluation.json
     for skill_name in spec.skills:
         skill_src = skills_source_dir / skill_name
         if skill_src.exists():
             skill_dest = claude_skills_dir / skill_name
-            shutil.copytree(skill_src, skill_dest)
+
+            # Copy skill directory, excluding evaluation.json
+            shutil.copytree(
+                skill_src,
+                skill_dest,
+                ignore=lambda src, names: ['evaluation.json'] if 'evaluation.json' in names else []
+            )
         else:
             raise FileNotFoundError(f"Skill not found: {skill_name} at {skill_src}")
 
@@ -79,7 +85,7 @@ def setup_workspace(spec: EvaluationSpec, skills_source_dir: Path) -> Path:
 
 async def run_evaluation(
     spec: EvaluationSpec,
-    skills_source_dir: Path | None = None,
+    skills_source_dir: Path,
     verbose: bool = False,
     output_file: Path | None = None
 ) -> None:
@@ -88,14 +94,10 @@ async def run_evaluation(
 
     Args:
         spec: The evaluation specification
-        skills_source_dir: Source directory for skills (defaults to ~/.claude/skills)
+        skills_source_dir: Source directory for skills (repository-relative path)
         verbose: Show live output during evaluation
         output_file: Path to stream messages to as they arrive (JSONL format)
     """
-    # Default to user's skills directory
-    if skills_source_dir is None:
-        skills_source_dir = Path.home() / ".claude" / "skills"
-
     # Set up isolated workspace
     work_dir = setup_workspace(spec, skills_source_dir)
 
