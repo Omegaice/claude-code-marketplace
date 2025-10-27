@@ -1,5 +1,4 @@
 {
-  "skills": ["endpoint-exploration"],
   "query": "My team needs to integrate with the RxNorm API endpoint at https://rxnav.nlm.nih.gov/REST/rxcui/{rxcui}/allrelated but the official docs are incomplete. I need to create proper documentation for our integration guide - can you help me figure out exactly how this endpoint behaves?",
   "files": [],
   "expected_behavior": [

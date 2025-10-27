@@ -6,15 +6,12 @@ from pydantic import BaseModel, Field
 class EvaluationSpec(BaseModel):
     """Specification for evaluating a skill."""
 
-    skills: list[str] = Field(
-        description="List of skill names to load for this evaluation"
-    )
     query: str = Field(
-        description="The query/prompt to send to Claude with the skills loaded"
+        description="The query/prompt to send to Claude with the skill loaded"
     )
     files: list[str] = Field(
         default_factory=list,
-        description="List of file paths to make available during evaluation"
+        description="List of file paths to make available during evaluation",
     )
     expected_behavior: list[str] = Field(
         description="List of expected behaviors that should be demonstrated"

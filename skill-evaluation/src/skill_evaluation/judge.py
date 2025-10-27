@@ -16,14 +16,14 @@ from skill_evaluation.models import EvaluationSpec
 
 
 async def judge_evaluation(
-    spec: EvaluationSpec,
-    runner_output_file: Path
+    spec: EvaluationSpec, skill_name: str, runner_output_file: Path
 ) -> tuple[bool, float, str]:
     """
     Use LLM-as-a-judge to evaluate whether the captured output meets expectations.
 
     Args:
         spec: The evaluation specification with expected behaviors
+        skill_name: Name of the skill being evaluated
         runner_output_file: Path to the runner-output.json file to evaluate
 
     Returns:
@@ -38,11 +38,11 @@ async def judge_evaluation(
 ORIGINAL TASK:
 {spec.query}
 
-SKILLS LOADED:
-{', '.join(spec.skills)}
+SKILL LOADED:
+{skill_name}
 
 EXPECTED BEHAVIORS:
-{chr(10).join(f"{i+1}. {behavior}" for i, behavior in enumerate(spec.expected_behavior))}
+{chr(10).join(f"{i + 1}. {behavior}" for i, behavior in enumerate(spec.expected_behavior))}
 
 EVALUATION INSTRUCTIONS:
 Read the runner output file at: {runner_output_file.name}
@@ -120,20 +120,22 @@ Respond with ONLY a JSON object (no markdown, no explanation):
         judgment = json.loads(judgment_text.strip())
     except json.JSONDecodeError:
         # Try to extract from markdown code blocks
-        match = re.search(r'```(?:json)?\s*(\{.*?\})\s*```', judgment_text, re.DOTALL)
+        match = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", judgment_text, re.DOTALL)
         if match:
             try:
                 judgment = json.loads(match.group(1))
             except json.JSONDecodeError as e:
-                raise RuntimeError(f"Failed to parse judge JSON response: {e}\nRaw: {judgment_text[:500]}")
+                raise RuntimeError(
+                    f"Failed to parse judge JSON response: {e}\nRaw: {judgment_text[:500]}"
+                )
         else:
             # Try to find JSON object anywhere in the text (judge might output text before JSON)
             # Find the first { that starts a JSON object
-            start_idx = judgment_text.find('{')
+            start_idx = judgment_text.find("{")
             if start_idx != -1:
                 # Try to parse from each { position
                 for i in range(start_idx, len(judgment_text)):
-                    if judgment_text[i] == '{':
+                    if judgment_text[i] == "{":
                         try:
                             # Try to parse from this position to the end
                             judgment = json.loads(judgment_text[i:])
@@ -141,9 +143,13 @@ Respond with ONLY a JSON object (no markdown, no explanation):
                         except json.JSONDecodeError:
                             continue
                 else:
-                    raise RuntimeError(f"No valid JSON found in judge response\nRaw: {judgment_text[:500]}")
+                    raise RuntimeError(
+                        f"No valid JSON found in judge response\nRaw: {judgment_text[:500]}"
+                    )
             else:
-                raise RuntimeError(f"No JSON object found in judge response\nRaw: {judgment_text[:500]}")
+                raise RuntimeError(
+                    f"No JSON object found in judge response\nRaw: {judgment_text[:500]}"
+                )
 
     # Extract values
     score = float(judgment.get("score", 0.0))
