@@ -85,6 +85,37 @@ def pid_alive(pid: int) -> bool:
     return Path(f"/proc/{pid}").exists()
 
 
+# -- Settings --
+
+
+def is_sandbox_enabled() -> bool:
+    """Check if sandbox is enabled by merging Claude settings files.
+
+    Reads in order (later overrides earlier):
+      $HOME/.claude/settings.json
+      $HOME/.claude/settings.local.json
+      $CLAUDE_PROJECT_DIR/.claude/settings.json
+      $CLAUDE_PROJECT_DIR/.claude/settings.local.json
+    """
+    home = Path.home() / ".claude"
+    project = Path(d) / ".claude" if (d := os.environ.get("CLAUDE_PROJECT_DIR")) else None
+
+    paths = [home / "settings.json", home / "settings.local.json"]
+    if project:
+        paths += [project / "settings.json", project / "settings.local.json"]
+
+    enabled = False
+    for p in paths:
+        try:
+            data = json.loads(p.read_text())
+            if "sandbox" in data and "enabled" in data["sandbox"]:
+                enabled = data["sandbox"]["enabled"]
+        except (OSError, json.JSONDecodeError, TypeError):
+            continue
+
+    return enabled
+
+
 # -- Core logic --
 
 
@@ -199,6 +230,9 @@ def main() -> None:
     try:
         hook_input = json.load(sys.stdin)
     except (json.JSONDecodeError, EOFError):
+        sys.exit(0)
+
+    if not is_sandbox_enabled():
         sys.exit(0)
 
     command = hook_input.get("tool_input", {}).get("command", "")
