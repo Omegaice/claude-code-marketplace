@@ -14,6 +14,15 @@
       "author": {
         "name": "omegaice"
       }
+    },
+    {
+      "name": "sandbox-cleanup",
+      "source": "./plugins/sandbox-cleanup",
+      "description": "Monitors bwrap sandbox processes and removes 0-byte placeholder files created by --ro-bind /dev/null mounts.",
+      "version": "0.1.0",
+      "author": {
+        "name": "omegaice"
+      }
     }
   ]
 }
