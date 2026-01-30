@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/sandbox-monitor.py"
+            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/sandbox-monitor.py"
           }
         ]
       }
